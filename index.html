@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Электротехника с нуля: интерактивная схема силы тока и понятные объяснения тока, напряжения, сопротивления и ЭДС.">
-  <title>Элтех наглядно — ток и заряд</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Электротехника с нуля: интерактивные схемы тока и напряжения, потенциалы, вольтметр и энергия заряда. Объяснения и самопроверка.">
+  <title>Элтех наглядно — ток и напряжение</title>
+  <link rel="stylesheet" href="styles.css?v=2">
   <script src="app.js" defer></script>
+  <script src="voltage.js" defer></script>
 </head>
 <body>
 <header class="page-header"><a href="#" class="brand">Элтех наглядно</a><a href="https://github.com/kwtpub/electrical-engineering-visuals">Код и материалы</a></header>
@@ -14,7 +15,7 @@
   <section class="intro">
     <h1>Сколько заряда проходит через провод?</h1>
     <p class="lead">Представь, что мы мысленно разрезали провод поперёк и считаем заряд, который проходит через это место. Сила тока показывает, сколько заряда проходит за секунду.</p>
-    <nav aria-label="Содержание"><a href="#simulation">Посмотреть опыт</a><a href="#basics">Разобрать базу</a><a href="#check">Проверить себя</a></nav>
+    <nav aria-label="Содержание"><a href="#simulation">Ток и заряд</a><a href="#voltage">Напряжение</a><a href="#basics">Разобрать базу</a><a href="#check">Проверить себя</a></nav>
   </section>
   <section id="simulation" aria-labelledby="simulation-title">
     <h2 id="simulation-title">Заряды в движении</h2>
@@ -46,6 +47,53 @@
     <div class="formula"><span>I = Δq / Δt</span><p><strong>1 А = 1 Кл/с.</strong> При постоянном токе 2 А за 5 с через сечение проходит 10 Кл.</p></div>
     <p>Мы считаем заряд, пересёкший <strong>одно выбранное сечение</strong>, а не все заряды, находящиеся внутри провода. Точки показывают упрощённую картину переноса заряда; микроскопическое движение электронов в металле сложнее.</p>
   </section>
+  <section id="voltage" aria-labelledby="voltage-title">
+    <h2 id="voltage-title">Напряжение: разница между двумя точками</h2>
+    <p>У точки A есть потенциал φ<sub>A</sub>, у точки B — φ<sub>B</sub>. Напряжение U<sub>AB</sub> — разность этих потенциалов. Представь два уровня: для переноса заряда важен перепад между ними.</p>
+    <div class="simulator">
+      <div class="voltage-controls">
+        <label for="potential-a">Потенциал A: <output id="potential-a-value">12 В</output><input id="potential-a" type="range" min="0" max="20" step="1" value="12"></label>
+        <label for="potential-b">Потенциал B: <output id="potential-b-value">0 В</output><input id="potential-b" type="range" min="0" max="20" step="1" value="0"></label>
+      </div>
+      <div class="potential-levels" role="img" aria-label="Уровни потенциалов A и B относительно одного нуля отсчёта">
+        <div class="level-column"><span>A</span><div class="level-track"><div id="level-a" class="level-fill"></div></div><span id="level-a-label">12 В</span></div>
+        <div class="potential-gap"><span>Разность уровней</span><strong id="potential-gap">12 В</strong><span class="caption">Высота — аналогия потенциала,<br>не высота провода</span></div>
+        <div class="level-column"><span>B</span><div class="level-track"><div id="level-b" class="level-fill"></div></div><span id="level-b-label">0 В</span></div>
+      </div>
+      <div class="circuit-heading">Участок цепи: резистор R = 100 Ом</div>
+      <svg id="voltage-circuit" width="100%" height="175" role="img" aria-label="Резистор между A и B; вольтметр подключён параллельно, к тем же двум точкам">
+        <g stroke="var(--structure)" stroke-width="2" fill="none">
+          <line x1="12%" y1="45" x2="44%" y2="45"/><rect x="44%" y="30" width="12%" height="30"/>
+          <line x1="56%" y1="45" x2="88%" y2="45"/>
+          <line x1="12%" y1="45" x2="12%" y2="125"/><line x1="88%" y1="45" x2="88%" y2="125"/>
+          <line x1="12%" y1="125" x2="88%" y2="125"/>
+        </g>
+        <circle cx="12%" cy="45" r="5" fill="var(--particle)"/><circle cx="88%" cy="45" r="5" fill="var(--particle)"/>
+        <text x="12%" y="22" text-anchor="middle" fill="var(--ink)">A</text><text x="88%" y="22" text-anchor="middle" fill="var(--ink)">B</text>
+        <circle cx="50%" cy="125" r="23" fill="var(--paper)" stroke="var(--section)" stroke-width="2"/>
+        <text x="50%" y="132" text-anchor="middle" fill="var(--ink)">V</text>
+        <circle id="energy-charge" cx="12%" cy="45" r="10" fill="var(--particle)" visibility="hidden"/>
+      </svg>
+      <div class="readings" aria-live="polite" aria-atomic="true">
+        <div><span id="voltmeter-label">Вольтметр: U_AB</span><output id="voltmeter">12 В</output></div>
+        <div><span>Ток через R, от A к B</span><output id="voltage-current">0,12 А</output></div>
+        <div><span>Передано резистору</span><output id="voltage-work">0 Дж</output></div>
+      </div>
+      <div class="controls">
+        <label for="energy-packet">Порция заряда<select id="energy-packet"><option value="1">1 Кл</option><option value="2">2 Кл</option></select></label>
+        <button id="voltage-play" type="button" class="primary">Показать перенос заряда</button>
+        <button id="swap-probes" type="button" aria-pressed="false">Поменять щупы</button>
+      </div>
+      <p id="probe-status" class="caption">Красный щуп на A, чёрный на B. Вольтметр подключён параллельно резистору.</p>
+      <p id="voltage-status" role="status">Положительный заряд движется от A к B: от большего потенциала к меньшему.</p>
+      <p class="caption">Показан участок цепи. Источник, поддерживающий потенциалы, находится за пределами рисунка. Точка изображает условную порцию положительного заряда; скорость анимации не задаёт реальное время переноса.</p>
+    </div>
+    <div class="formula"><span>U<sub>AB</sub> = φ<sub>A</sub> − φ<sub>B</sub></span><p>Работа электрического поля: <strong>A<sub>AB</sub> = qU<sub>AB</sub></strong>. Значит, <strong>1 В = 1 Дж/Кл</strong>.</p></div>
+    <article><h3>Что означают 12 вольт?</h3><p>Если A выше B по потенциалу на 12 В, то при переносе положительного заряда 1 Кл от A к B электрическое поле совершает работу 12 Дж. В резисторе эта энергия превращается в тепло. Для 2 Кл при том же напряжении получится 24 Дж: энергия изменилась, напряжение осталось прежним.</p></article>
+    <article><h3>Потенциал и напряжение — как уровень и перепад</h3><p>Потенциал задают относительно выбранного нуля. Напряжение — разница между двумя точками. Сравни на ползунках пары <strong>12 В и 0 В</strong>, затем <strong>17 В и 5 В</strong>. В обоих случаях U<sub>AB</sub> = 12 В. Одновременный сдвиг обоих потенциалов не меняет напряжение и ток через резистор.</p></article>
+    <article><h3>Почему на вольтметре бывает минус?</h3><p>Вольтметр показывает потенциал красного щупа минус потенциал чёрного. Нажми «Поменять щупы»: показание изменит знак, но потенциалы и ток останутся прежними. U<sub>BA</sub> = −U<sub>AB</sub>. Если же сам потенциал B сделать выше A, действительный ток через резистор пойдёт от B к A.</p></article>
+    <p class="takeaway">Ток — сколько кулонов проходит за секунду. Напряжение — сколько джоулей приходится на каждый кулон при переносе между выбранными точками. Напряжение может быть и при отсутствии тока — например, между выводами отключённой от нагрузки батарейки.</p>
+  </section>
   <section id="basics" aria-labelledby="basics-title">
     <h2 id="basics-title">Четыре величины, с которых начинается электротехника</h2>
     <article>
@@ -76,6 +124,9 @@
     <details><summary>За 5 секунд при токе 0,5 А сколько заряда пройдёт через сечение?</summary><p>Δq = IΔt = 0,5 × 5 = <strong>2,5 Кл</strong>. Проверь это в анимации.</p></details>
     <details><summary>К резистору 100 Ом приложили 20 В. Что изменится при замене на 200 Ом?</summary><p>Сначала I = 20/100 = <strong>0,2 А</strong>. После замены при том же напряжении I = 20/200 = <strong>0,1 А</strong>. Ток уменьшится вдвое.</p></details>
     <details><summary>Отрицательный ток означает ошибку в расчёте?</summary><p>Нет. Если уравнения составлены правильно, минус означает, что действительный ток направлен против выбранной стрелки.</p></details>
+    <details><summary>У A потенциал 17 В, у B — 5 В. Чему равно U_AB?</summary><p>U<sub>AB</sub> = 17 − 5 = <strong>12 В</strong>. Потенциал одной точки и напряжение между точками — разные величины.</p></details>
+    <details><summary>При напряжении 12 В прошло 2 Кл. Сколько энергии выделится в резисторе?</summary><p>При движении положительного заряда от большего потенциала к меньшему A = qU = 2 × 12 = <strong>24 Дж</strong>.</p></details>
+    <details><summary>Если поменять щупы вольтметра, ток тоже изменит направление?</summary><p>Нет. У идеального вольтметра поменяется только знак показания. Ток через резистор определяется самими потенциалами A и B.</p></details>
   </section>
 </main>
 <footer>Материалы для возвращения к базе электротехники. <a href="https://github.com/kwtpub/electrical-engineering-visuals">Репозиторий на GitHub</a></footer>
