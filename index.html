@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Электротехника с нуля: интерактивные схемы тока и напряжения, потенциалы, вольтметр и энергия заряда. Объяснения и самопроверка.">
   <title>Элтех наглядно — ток, напряжение и узлы</title>
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=5">
   <script src="app.js" defer></script>
   <script src="voltage.js" defer></script>
   <script src="nodes.js" defer></script>
   <script src="superposition.js" defer></script>
   <script src="reciprocity.js" defer></script>
+  <script src="compensation.js" defer></script>
 </head>
 <body>
 <header class="page-header"><a href="#" class="brand">Элтех наглядно</a><a href="https://github.com/kwtpub/electrical-engineering-visuals">Код и материалы</a></header>
@@ -18,7 +19,7 @@
   <section class="intro">
     <h1>Сколько заряда проходит через провод?</h1>
     <p class="lead">Представь, что мы мысленно разрезали провод поперёк и считаем заряд, который проходит через это место. Сила тока показывает, сколько заряда проходит за секунду.</p>
-    <nav aria-label="Содержание"><a href="#simulation">Ток и заряд</a><a href="#voltage">Напряжение</a><a href="#nodes">Узлы нашей схемы</a><a href="#superposition">Наложение</a><a href="#reciprocity">Взаимность</a><a href="#basics">Разобрать базу</a><a href="#check">Проверить себя</a></nav>
+    <nav aria-label="Содержание"><a href="#simulation">Ток и заряд</a><a href="#voltage">Напряжение</a><a href="#nodes">Узлы нашей схемы</a><a href="#superposition">Наложение</a><a href="#reciprocity">Взаимность</a><a href="#compensation">Компенсация</a><a href="#basics">Разобрать базу</a><a href="#check">Проверить себя</a></nav>
   </section>
   <section id="simulation" aria-labelledby="simulation-title">
     <h2 id="simulation-title">Заряды в движении</h2>
@@ -256,6 +257,59 @@
 </div>
 </div>
     <p class="caption">Переставляем источник и амперметр. Все сопротивления сохраняем. Числа в примере выбраны для наглядности.</p>
+  </section>
+  <section id="compensation" aria-labelledby="compensation-title">
+    <h2 id="compensation-title">Принцип компенсации</h2>
+    <div class="simulator"><div id="compensation-demo">
+
+  <div>Учебный пример: заменяем R₂ источником с тем же напряжением между А и Б.</div>
+  <svg class="comp-circuit" role="img" aria-label="Источник 12 вольт слева, резистор R1 2 ома сверху и R2 4 ома справа. Между точками А и Б на месте R2 появляется компенсирующий источник 8 вольт, направленный вверх.">
+    <defs><marker id="comp-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="var(--ink)"/></marker></defs>
+    <g fill="none" stroke="var(--ink)" stroke-width="1.5">
+      <line x1="15%" y1="80" x2="40%" y2="80"/><rect x="40%" y="67" width="20%" height="26"/>
+      <line x1="60%" y1="80" x2="85%" y2="80"/>
+      <line x1="15%" y1="80" x2="15%" y2="155"/><circle cx="15%" cy="180" r="25"/>
+      <line x1="15%" y1="205" x2="15%" y2="270"/>
+      <line x1="15%" y1="270" x2="85%" y2="270"/>
+      <g class="load">
+        <line x1="85%" y1="80" x2="85%" y2="150"/>
+        <rect x="82%" y="150" width="6%" height="60" stroke="var(--blue)" stroke-width="3"/>
+        <line x1="85%" y1="210" x2="85%" y2="270"/>
+      </g>
+      <g class="comp-source" hidden>
+        <line x1="85%" y1="80" x2="85%" y2="155"/>
+        <circle cx="85%" cy="180" r="25" stroke="var(--blue)" stroke-width="3"/>
+        <line x1="85%" y1="205" x2="85%" y2="270"/>
+        <line x1="85%" y1="194" x2="85%" y2="166" marker-end="url(#comp-arrow)"/>
+      </g>
+      <line x1="15%" y1="194" x2="15%" y2="166" marker-end="url(#comp-arrow)"/>
+      <line x1="43%" y1="119" x2="57%" y2="119" marker-end="url(#comp-arrow)"/>
+    </g>
+    <g text-anchor="middle">
+      <text x="50%" y="42">R₁ = 2 Ом</text>
+      <text x="50%" y="145">I = 2 А</text>
+      <text x="15%" y="132">E = 12 В</text>
+      <text class="part-name" x="65%" y="184">R₂</text>
+      <text class="part-value" x="65%" y="208">4 Ом</text>
+      <text x="85%" y="59">А</text><text x="85%" y="297">Б</text>
+      <g class="polarity" hidden><text x="94%" y="143">+</text><text x="94%" y="229">−</text></g>
+    </g>
+    <g fill="var(--ink)"><circle cx="85%" cy="80" r="5"/><circle cx="85%" cy="270" r="5"/></g>
+  </svg>
+  <div class="comp-steps" aria-label="Шаги принципа компенсации">
+    <button class="principle-choice" type="button" data-step="0" aria-pressed="true">1. Исходная цепь</button>
+    <button class="principle-choice" type="button" data-step="1" aria-pressed="false">2. Напряжение АБ</button>
+    <button class="principle-choice" type="button" data-step="2" aria-pressed="false">3. Замена</button>
+    <button class="principle-choice" type="button" data-step="3" aria-pressed="false">4. Проверка тока</button>
+  </div>
+  <div class="comp-work" aria-live="polite">
+    <div class="meaning">В исходной цепи два резистора последовательно. Находим ток.</div>
+    <div class="comp-formula">I = E ÷ (R₁ + R₂).</div>
+    <div class="numbers">I = 12 В ÷ (2 Ом + 4 Ом) = 2 А.</div>
+  </div>
+
+</div>
+</div>
   </section>
   <section id="basics" aria-labelledby="basics-title">
     <h2 id="basics-title">Четыре величины, с которых начинается электротехника</h2>

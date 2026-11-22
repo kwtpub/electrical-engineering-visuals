@@ -35,3 +35,11 @@
 
 .principle-choice[aria-pressed="true"]{background:var(--blue);color:var(--bg);border-color:var(--blue)}
 #superposition-simple .caption,#reciprocity-demo .caption{margin:0}
+
+
+    #compensation-demo{display:grid;gap:16px;color:var(--ink)}
+    #compensation-demo .comp-circuit{display:block;width:100%;height:310px}
+    #compensation-demo .comp-circuit text{fill:currentColor}
+    #compensation-demo .comp-steps{display:flex;flex-wrap:wrap;gap:8px}
+    #compensation-demo .comp-work{display:grid;gap:12px}
+    #compensation-demo [hidden]{display:none}
