@@ -43,3 +43,9 @@
     #compensation-demo .comp-steps{display:flex;flex-wrap:wrap;gap:8px}
     #compensation-demo .comp-work{display:grid;gap:12px}
     #compensation-demo [hidden]{display:none}
+#equivalent-generator-demo{display:grid;gap:16px;color:var(--ink)}
+    #equivalent-generator-demo .eq-circuit{display:block;width:100%;height:310px}
+    #equivalent-generator-demo .eq-circuit text{fill:currentColor}
+    #equivalent-generator-demo .eq-steps{display:flex;flex-wrap:wrap;gap:8px}
+    #equivalent-generator-demo .eq-detail{display:grid;gap:10px}
+    #equivalent-generator-demo [hidden]{display:none}

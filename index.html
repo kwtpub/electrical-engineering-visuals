@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Электротехника с нуля: интерактивные схемы тока и напряжения, потенциалы, вольтметр и энергия заряда. Объяснения и самопроверка.">
   <title>Элтех наглядно — ток, напряжение и узлы</title>
-  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="stylesheet" href="styles.css?v=6">
   <script src="app.js" defer></script>
   <script src="voltage.js" defer></script>
   <script src="nodes.js" defer></script>
   <script src="superposition.js" defer></script>
   <script src="reciprocity.js" defer></script>
   <script src="compensation.js" defer></script>
+  <script src="generator.js" defer></script>
 </head>
 <body>
 <header class="page-header"><a href="#" class="brand">Элтех наглядно</a><a href="https://github.com/kwtpub/electrical-engineering-visuals">Код и материалы</a></header>
@@ -19,7 +20,7 @@
   <section class="intro">
     <h1>Сколько заряда проходит через провод?</h1>
     <p class="lead">Представь, что мы мысленно разрезали провод поперёк и считаем заряд, который проходит через это место. Сила тока показывает, сколько заряда проходит за секунду.</p>
-    <nav aria-label="Содержание"><a href="#simulation">Ток и заряд</a><a href="#voltage">Напряжение</a><a href="#nodes">Узлы нашей схемы</a><a href="#superposition">Наложение</a><a href="#reciprocity">Взаимность</a><a href="#compensation">Компенсация</a><a href="#basics">Разобрать базу</a><a href="#check">Проверить себя</a></nav>
+    <nav aria-label="Содержание"><a href="#simulation">Ток и заряд</a><a href="#voltage">Напряжение</a><a href="#nodes">Узлы нашей схемы</a><a href="#superposition">Наложение</a><a href="#reciprocity">Взаимность</a><a href="#compensation">Компенсация</a><a href="#generator">Эквивалентный генератор</a><a href="#basics">Разобрать базу</a><a href="#check">Проверить себя</a></nav>
   </section>
   <section id="simulation" aria-labelledby="simulation-title">
     <h2 id="simulation-title">Заряды в движении</h2>
@@ -306,6 +307,52 @@
     <div class="meaning">В исходной цепи два резистора последовательно. Находим ток.</div>
     <div class="comp-formula">I = E ÷ (R₁ + R₂).</div>
     <div class="numbers">I = 12 В ÷ (2 Ом + 4 Ом) = 2 А.</div>
+  </div>
+
+</div>
+</div>
+  </section>
+  <section id="generator" aria-labelledby="generator-title">
+    <h2 id="generator-title">Эквивалентный генератор</h2>
+    <div class="simulator"><div id="equivalent-generator-demo">
+
+  <div class="stage-label">Исходная цепь: выделенная часть питает нагрузку справа.</div>
+  <svg class="eq-circuit" role="img" aria-label="Источник и два резистора слева питают нагрузку 2 ома справа через выводы А и Б. По шагам нагрузка отключается, определяются напряжение холостого хода и эквивалентное сопротивление, затем левая часть заменяется генератором.">
+    <defs><marker id="eq-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="var(--ink)"/></marker></defs>
+    <rect x="3%" y="49" width="63%" height="236" rx="12" fill="var(--blue)" fill-opacity="0.08"/>
+    <g fill="none" stroke="var(--ink)" stroke-width="1.5">
+      <line x1="12%" y1="80" x2="25%" y2="80"/><rect x="25%" y="68" width="14%" height="24"/>
+      <line x1="39%" y1="80" x2="72%" y2="80"/>
+      <line x1="12%" y1="80" x2="12%" y2="151"/>
+      <g class="eq-source"><circle cx="12%" cy="175" r="24"/><line x1="12%" y1="188" x2="12%" y2="162" marker-end="url(#eq-arrow)"/></g>
+      <line class="eq-source-wire" x1="12%" y1="151" x2="12%" y2="199" hidden/>
+      <line x1="12%" y1="199" x2="12%" y2="270"/>
+      <line x1="12%" y1="270" x2="72%" y2="270"/>
+      <g class="eq-shunt"><line x1="55%" y1="80" x2="55%" y2="150"/><rect x="52%" y="150" width="6%" height="50"/><line x1="55%" y1="200" x2="55%" y2="270"/></g>
+      <g class="eq-load"><line x1="72%" y1="80" x2="88%" y2="80"/><line x1="88%" y1="80" x2="88%" y2="150"/><rect x="85%" y="150" width="6%" height="50" stroke="var(--blue)" stroke-width="3"/><line x1="88%" y1="200" x2="88%" y2="270"/><line x1="88%" y1="270" x2="72%" y2="270"/></g>
+      <g class="eq-meter" hidden><line x1="72%" y1="80" x2="88%" y2="80"/><line x1="88%" y1="80" x2="88%" y2="151"/><circle cx="88%" cy="175" r="24"/><line x1="88%" y1="199" x2="88%" y2="270"/><line x1="88%" y1="270" x2="72%" y2="270"/></g>
+    </g>
+    <g text-anchor="middle">
+      <text class="eq-series-label" x="32%" y="34">R₁ = 6 Ом</text>
+      <text class="eq-source-label" x="16%" y="132">12 В</text>
+      <g class="eq-shunt-label"><text x="43%" y="171">R₂</text><text x="43%" y="194">3 Ом</text></g>
+      <g class="eq-load-label"><text x="86%" y="124">Нагрузка</text><text x="86%" y="144">2 Ом</text></g>
+      <text class="eq-meter-symbol" x="88%" y="180" hidden>V</text>
+      <text x="72%" y="59">А</text><text x="72%" y="298">Б</text>
+      <text class="eq-current" x="86%" y="242">I = 1 А ↓</text>
+    </g>
+    <g fill="var(--ink)"><circle cx="72%" cy="80" r="5"/><circle cx="72%" cy="270" r="5"/></g>
+  </svg>
+  <div class="eq-steps" aria-label="Шаги замены эквивалентным генератором">
+    <button class="principle-choice" type="button" data-step="0" aria-pressed="true">1. Исходная цепь</button>
+    <button class="principle-choice" type="button" data-step="1" aria-pressed="false">2. Снимаем нагрузку</button>
+    <button class="principle-choice" type="button" data-step="2" aria-pressed="false">3. Находим сопротивление</button>
+    <button class="principle-choice" type="button" data-step="3" aria-pressed="false">4. Заменяем генератором</button>
+    <button class="principle-choice" type="button" data-step="4" aria-pressed="false">5. Возвращаем нагрузку</button>
+  </div>
+  <div class="eq-detail" aria-live="polite">
+    <div class="eq-action">Справа — нагрузка 2 Ом. Ток через неё в исходной цепи равен 1 А.</div>
+    <div class="eq-result">Заменим всю выделенную часть слева, сохранив поведение на выводах А и Б.</div>
   </div>
 
 </div>
