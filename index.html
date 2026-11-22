@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Электротехника с нуля: интерактивные схемы тока и напряжения, потенциалы, вольтметр и энергия заряда. Объяснения и самопроверка.">
   <title>Элтех наглядно — ток, напряжение и узлы</title>
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
   <script src="app.js" defer></script>
   <script src="voltage.js" defer></script>
   <script src="nodes.js" defer></script>
+  <script src="superposition.js" defer></script>
+  <script src="reciprocity.js" defer></script>
 </head>
 <body>
 <header class="page-header"><a href="#" class="brand">Элтех наглядно</a><a href="https://github.com/kwtpub/electrical-engineering-visuals">Код и материалы</a></header>
@@ -16,7 +18,7 @@
   <section class="intro">
     <h1>Сколько заряда проходит через провод?</h1>
     <p class="lead">Представь, что мы мысленно разрезали провод поперёк и считаем заряд, который проходит через это место. Сила тока показывает, сколько заряда проходит за секунду.</p>
-    <nav aria-label="Содержание"><a href="#simulation">Ток и заряд</a><a href="#voltage">Напряжение</a><a href="#nodes">Узлы нашей схемы</a><a href="#basics">Разобрать базу</a><a href="#check">Проверить себя</a></nav>
+    <nav aria-label="Содержание"><a href="#simulation">Ток и заряд</a><a href="#voltage">Напряжение</a><a href="#nodes">Узлы нашей схемы</a><a href="#superposition">Наложение</a><a href="#reciprocity">Взаимность</a><a href="#basics">Разобрать базу</a><a href="#check">Проверить себя</a></nav>
   </section>
   <section id="simulation" aria-labelledby="simulation-title">
     <h2 id="simulation-title">Заряды в движении</h2>
@@ -152,6 +154,108 @@
 </div>
 
     </div>
+  </section>
+  <section id="superposition" aria-labelledby="superposition-title">
+    <h2 id="superposition-title">Принцип наложения</h2>
+    <p>В линейной цепи считаем ток от каждого источника отдельно, затем складываем вклады с учётом направлений.</p>
+    <div class="simulator"><div id="superposition-simple">
+
+  <div>Учебный пример: два идеальных источника и резистор. Найти ток через R.</div>
+  <svg class="super-circuit" role="img" aria-label="Два источника ЭДС: слева 12 вольт, справа 6 вольт, оба направлены вверх. Между их верхними выводами резистор 6 ом. Нижние выводы соединены проводом.">
+    <defs>
+      <marker id="super-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="var(--ink)"/></marker>
+      <marker id="super-current-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="var(--blue)"/></marker>
+    </defs>
+    <g stroke="var(--ink)" stroke-width="1.5" fill="none">
+      <line x1="16%" y1="70" x2="41%" y2="70"/><rect x="41%" y="57" width="18%" height="26"/><line x1="59%" y1="70" x2="84%" y2="70"/>
+      <line x1="16%" y1="70" x2="16%" y2="144"/><line x1="16%" y1="192" x2="16%" y2="251"/>
+      <line x1="84%" y1="70" x2="84%" y2="144"/><line x1="84%" y1="192" x2="84%" y2="251"/>
+      <line x1="16%" y1="251" x2="84%" y2="251"/>
+      <g class="source-one"><circle cx="16%" cy="168" r="24"/><line x1="16%" y1="181" x2="16%" y2="155" marker-end="url(#super-arrow)"/></g>
+      <g class="source-two"><circle cx="84%" cy="168" r="24"/><line x1="84%" y1="181" x2="84%" y2="155" marker-end="url(#super-arrow)"/></g>
+      <line class="wire-one" x1="16%" y1="144" x2="16%" y2="192" stroke="var(--blue)" stroke-width="3" hidden/>
+      <line class="wire-two" x1="84%" y1="144" x2="84%" y2="192" stroke="var(--blue)" stroke-width="3" hidden/>
+      <line x1="25%" y1="109" x2="75%" y2="109" marker-end="url(#super-arrow)"/>
+    </g>
+    <g text-anchor="middle">
+      <text x="50%" y="36">R = 6 Ом</text>
+      <text class="source-one-label" x="16%" y="132">E₁ = 12 В</text><text class="source-two-label" x="84%" y="132">E₂ = 6 В</text>
+      <text x="50%" y="282">Направление «плюс» для тока →</text>
+      <text class="actual-label" x="50%" y="220">Ток пока неизвестен</text>
+    </g>
+    <line class="actual-arrow" x1="34%" y1="180" x2="66%" y2="180" stroke="var(--blue)" stroke-width="3" marker-end="url(#super-current-arrow)" hidden/>
+  </svg>
+  <div class="super-steps" aria-label="Шаг расчёта методом наложения">
+    <button class="principle-choice" type="button" data-step="0" aria-pressed="true">Дано</button>
+    <button class="principle-choice" type="button" data-step="1" aria-pressed="false">1. Только E₁</button>
+    <button class="principle-choice" type="button" data-step="2" aria-pressed="false">2. Только E₂</button>
+    <button class="principle-choice" type="button" data-step="3" aria-pressed="false">3. Складываем</button>
+  </div>
+  <div class="super-work" aria-live="polite">
+    <div class="action">Дано: E₁ = 12 В; E₂ = 6 В; R = 6 Ом.</div>
+    <div class="rule">Ток вправо считаем положительным. Оба источника направлены вверх и в этом контуре действуют встречно.</div>
+    <div class="equation">Будем находить вклад каждого источника отдельно.</div>
+    <div class="calculation"></div>
+    <div class="result"></div>
+  </div>
+
+</div>
+</div>
+  </section>
+  <section id="reciprocity" aria-labelledby="reciprocity-title">
+    <h2 id="reciprocity-title">Принцип взаимности</h2>
+    <p>В линейной взаимной цепи тот же источник, перенесённый в ветвь измерения, создаёт в прежней ветви источника такой же ток при согласованных направлениях.</p>
+    <div class="simulator"><div id="reciprocity-demo">
+
+  <div class="controls" aria-label="Расположение источника">
+    <button class="principle-choice" type="button" data-side="left" aria-pressed="true">1. Источник слева</button>
+    <button class="principle-choice" type="button" data-side="right" aria-pressed="false">2. Источник справа</button>
+  </div>
+  <svg class="rec-circuit" role="img" aria-label="Схема как в конспекте: R1 слева сверху, R3 справа сверху, R2 вертикально посередине. Один источник и идеальный амперметр в противоположных боковых ветвях меняются местами.">
+    <defs><marker id="rec-up" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="var(--blue)"/></marker></defs>
+    <g stroke="var(--ink)" stroke-width="1.5" fill="none">
+      <line x1="12%" y1="80" x2="25%" y2="80"/><rect x="25%" y="68" width="12%" height="24"/>
+      <line x1="37%" y1="80" x2="63%" y2="80"/><rect x="63%" y="68" width="12%" height="24"/>
+      <line x1="75%" y1="80" x2="88%" y2="80"/>
+      <line x1="12%" y1="80" x2="12%" y2="167"/><line x1="12%" y1="213" x2="12%" y2="270"/>
+      <line x1="88%" y1="80" x2="88%" y2="167"/><line x1="88%" y1="213" x2="88%" y2="270"/>
+      <line x1="12%" y1="270" x2="88%" y2="270"/>
+      <line x1="50%" y1="80" x2="50%" y2="150"/><rect x="47%" y="150" width="6%" height="50"/>
+      <line x1="50%" y1="200" x2="50%" y2="270"/>
+    </g>
+    <g class="left-source" stroke="var(--blue)" stroke-width="2" fill="none">
+      <circle cx="12%" cy="190" r="23"/><line x1="12%" y1="202" x2="12%" y2="178" marker-end="url(#rec-up)"/>
+    </g>
+    <g class="right-source" stroke="var(--blue)" stroke-width="2" fill="none" hidden>
+      <circle cx="88%" cy="190" r="23"/><line x1="88%" y1="202" x2="88%" y2="178" marker-end="url(#rec-up)"/>
+    </g>
+    <g class="left-meter" hidden>
+      <circle cx="12%" cy="190" r="23" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+      <text x="12%" y="195" text-anchor="middle">A</text>
+      <line x1="24%" y1="169" x2="24%" y2="210" stroke="var(--blue)" stroke-width="2" marker-end="url(#rec-up)"/>
+    </g>
+    <g class="right-meter">
+      <circle cx="88%" cy="190" r="23" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+      <text x="88%" y="195" text-anchor="middle">A</text>
+      <line x1="76%" y1="169" x2="76%" y2="210" stroke="var(--blue)" stroke-width="2" marker-end="url(#rec-up)"/>
+    </g>
+    <g text-anchor="middle">
+      <text x="31%" y="32">R₁</text><text x="31%" y="54">2 Ом</text>
+      <text x="69%" y="32">R₃</text><text x="69%" y="54">6 Ом</text>
+      <text x="61%" y="169">R₂</text><text x="61%" y="192">3 Ом</text>
+      <text class="left-label" x="12%" y="148">12 В</text><text class="right-label" x="88%" y="148">1 А</text>
+    </g>
+    <g fill="var(--ink)"><circle cx="50%" cy="80" r="5"/><circle cx="50%" cy="270" r="5"/></g>
+  </svg>
+  <div class="rec-result" aria-live="polite">
+    <div class="placement">Источник 12 В — слева. Амперметр — справа.</div>
+    <div class="reading">Ток в правой ветви: 1 А вниз.</div>
+  </div>
+  <div class="caption">A — идеальный амперметр. Стрелка внутри источника — ЭДС; стрелка рядом с амперметром — измеряемый ток.</div>
+
+</div>
+</div>
+    <p class="caption">Переставляем источник и амперметр. Все сопротивления сохраняем. Числа в примере выбраны для наглядности.</p>
   </section>
   <section id="basics" aria-labelledby="basics-title">
     <h2 id="basics-title">Четыре величины, с которых начинается электротехника</h2>

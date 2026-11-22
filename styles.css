@@ -17,3 +17,21 @@
 #lab-three-nodes .node-choice[aria-pressed="true"]{background:var(--blue);color:var(--bg);border-color:var(--blue)}
 #lab-three-nodes .caption{margin:0}
 @media(max-width:540px){#lab-three-nodes .circuit text{font-size:14px}}
+
+
+    #superposition-simple{display:grid;gap:16px;color:var(--ink)}
+    #superposition-simple .super-circuit{display:block;width:100%;height:290px}
+    #superposition-simple .super-circuit text{fill:currentColor}
+    #superposition-simple .super-steps{display:flex;flex-wrap:wrap;gap:8px}
+    #superposition-simple .super-work{display:grid;gap:12px}
+    #superposition-simple [hidden]{display:none}
+
+
+    #reciprocity-demo{display:grid;gap:16px;color:var(--ink)}
+    #reciprocity-demo .rec-circuit{display:block;width:100%;height:300px}
+    #reciprocity-demo .rec-circuit text{fill:currentColor}
+    #reciprocity-demo [hidden]{display:none}
+    #reciprocity-demo .rec-result{display:grid;gap:8px}
+
+.principle-choice[aria-pressed="true"]{background:var(--blue);color:var(--bg);border-color:var(--blue)}
+#superposition-simple .caption,#reciprocity-demo .caption{margin:0}
