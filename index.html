@@ -4,10 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Электротехника с нуля: интерактивные схемы тока и напряжения, потенциалы, вольтметр и энергия заряда. Объяснения и самопроверка.">
-  <title>Элтех наглядно — ток и напряжение</title>
-  <link rel="stylesheet" href="styles.css?v=2">
+  <title>Элтех наглядно — ток, напряжение и узлы</title>
+  <link rel="stylesheet" href="styles.css?v=3">
   <script src="app.js" defer></script>
   <script src="voltage.js" defer></script>
+  <script src="nodes.js" defer></script>
 </head>
 <body>
 <header class="page-header"><a href="#" class="brand">Элтех наглядно</a><a href="https://github.com/kwtpub/electrical-engineering-visuals">Код и материалы</a></header>
@@ -15,7 +16,7 @@
   <section class="intro">
     <h1>Сколько заряда проходит через провод?</h1>
     <p class="lead">Представь, что мы мысленно разрезали провод поперёк и считаем заряд, который проходит через это место. Сила тока показывает, сколько заряда проходит за секунду.</p>
-    <nav aria-label="Содержание"><a href="#simulation">Ток и заряд</a><a href="#voltage">Напряжение</a><a href="#basics">Разобрать базу</a><a href="#check">Проверить себя</a></nav>
+    <nav aria-label="Содержание"><a href="#simulation">Ток и заряд</a><a href="#voltage">Напряжение</a><a href="#nodes">Узлы нашей схемы</a><a href="#basics">Разобрать базу</a><a href="#check">Проверить себя</a></nav>
   </section>
   <section id="simulation" aria-labelledby="simulation-title">
     <h2 id="simulation-title">Заряды в движении</h2>
@@ -93,6 +94,64 @@
     <article><h3>Потенциал и напряжение — как уровень и перепад</h3><p>Потенциал задают относительно выбранного нуля. Напряжение — разница между двумя точками. Сравни на ползунках пары <strong>12 В и 0 В</strong>, затем <strong>17 В и 5 В</strong>. В обоих случаях U<sub>AB</sub> = 12 В. Одновременный сдвиг обоих потенциалов не меняет напряжение и ток через резистор.</p></article>
     <article><h3>Почему на вольтметре бывает минус?</h3><p>Вольтметр показывает потенциал красного щупа минус потенциал чёрного. Нажми «Поменять щупы»: показание изменит знак, но потенциалы и ток останутся прежними. U<sub>BA</sub> = −U<sub>AB</sub>. Если же сам потенциал B сделать выше A, действительный ток через резистор пойдёт от B к A.</p></article>
     <p class="takeaway">Ток — сколько кулонов проходит за секунду. Напряжение — сколько джоулей приходится на каждый кулон при переносе между выбранными точками. Напряжение может быть и при отсутствии тока — например, между выводами отключённой от нагрузки батарейки.</p>
+  </section>
+  <section id="nodes" aria-labelledby="nodes-title">
+    <h2 id="nodes-title">Узлы нашей схемы</h2>
+    <p>Узел соединяет три или больше ветвей. Выбери узел — подсветится весь относящийся к нему провод.</p>
+    <div class="simulator">
+      <div id="lab-three-nodes">
+
+  <div class="controls" aria-label="Выбор узла">
+    <button class="node-choice" type="button" data-node="1" aria-pressed="true">Узел 1</button>
+    <button class="node-choice" type="button" data-node="2" aria-pressed="false">Узел 2</button>
+    <button class="node-choice" type="button" data-node="3" aria-pressed="false">Узел 3</button>
+  </div>
+  <svg class="circuit" role="img" aria-label="Схема лабораторной 3. Слева источник E1 вверх, справа E2 вниз. Сверху R2, R7 и R5. От узлов 1 и 2 вниз идут R3 и R6. Внизу общий узел 3.">
+    <defs><marker id="lab3-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="var(--ink)"/></marker></defs>
+    <g stroke="var(--ink)" stroke-width="1.5" fill="none">
+      <line x1="8%" y1="80" x2="17%" y2="80"/><rect x="17%" y="69" width="10%" height="22"/>
+      <line x1="27%" y1="80" x2="45%" y2="80"/><rect x="45%" y="69" width="10%" height="22"/>
+      <line x1="55%" y1="80" x2="73%" y2="80"/><rect x="73%" y="69" width="10%" height="22"/>
+      <line x1="83%" y1="80" x2="92%" y2="80"/>
+      <line x1="8%" y1="80" x2="8%" y2="160"/><circle cx="8%" cy="182" r="22"/>
+      <line x1="8%" y1="204" x2="8%" y2="285"/>
+      <line x1="92%" y1="80" x2="92%" y2="160"/><circle cx="92%" cy="182" r="22"/>
+      <line x1="92%" y1="204" x2="92%" y2="285"/>
+      <line x1="35%" y1="80" x2="35%" y2="158"/><rect x="32%" y="158" width="6%" height="50"/>
+      <line x1="35%" y1="208" x2="35%" y2="285"/>
+      <line x1="65%" y1="80" x2="65%" y2="158"/><rect x="62%" y="158" width="6%" height="50"/>
+      <line x1="65%" y1="208" x2="65%" y2="285"/>
+      <line x1="8%" y1="285" x2="92%" y2="285"/>
+    </g>
+    <g class="node-highlight" data-highlight="1"><line x1="27%" y1="80" x2="45%" y2="80"/><line x1="35%" y1="80" x2="35%" y2="158"/></g>
+    <g class="node-highlight" data-highlight="2" visibility="hidden"><line x1="55%" y1="80" x2="73%" y2="80"/><line x1="65%" y1="80" x2="65%" y2="158"/></g>
+    <g class="node-highlight" data-highlight="3" visibility="hidden"><line x1="8%" y1="285" x2="92%" y2="285"/><line x1="8%" y1="204" x2="8%" y2="285"/><line x1="35%" y1="208" x2="35%" y2="285"/><line x1="65%" y1="208" x2="65%" y2="285"/><line x1="92%" y1="204" x2="92%" y2="285"/></g>
+    <g text-anchor="middle">
+      <text x="22%" y="53">R₂</text><text x="50%" y="53">R₇</text><text x="78%" y="53">R₅</text>
+      <text x="43%" y="190">R₃</text><text x="73%" y="190">R₆</text>
+      <text x="8%" y="145">E₁</text><text x="92%" y="145">E₂</text>
+      <text x="35%" y="29">Узел 1</text><text x="65%" y="29">Узел 2</text><text x="50%" y="319">Узел 3</text>
+      <text x="22%" y="137">I₂</text><text x="50%" y="137">I₇</text><text x="79%" y="137">I₅</text>
+      <text x="20%" y="193">I₃</text><text x="50%" y="193">I₆</text>
+    </g>
+    <g stroke="var(--ink)" stroke-width="1.5" marker-end="url(#lab3-arrow)">
+      <line x1="8%" y1="194" x2="8%" y2="170"/><line x1="92%" y1="170" x2="92%" y2="194"/>
+      <line x1="18%" y1="112" x2="28%" y2="112"/><line x1="45%" y1="112" x2="55%" y2="112"/><line x1="74%" y1="112" x2="84%" y2="112"/>
+      <line x1="26%" y1="165" x2="26%" y2="213"/><line x1="56%" y1="165" x2="56%" y2="213"/>
+    </g>
+    <circle class="node-dot selected" data-dot="1" cx="35%" cy="80" r="6"/><circle class="node-dot" data-dot="2" cx="65%" cy="80" r="6"/>
+    <circle class="node-dot" data-dot="3" cx="35%" cy="285" r="5"/><circle class="node-dot" data-dot="3" cx="65%" cy="285" r="5"/>
+  </svg>
+  <div class="node-result" aria-live="polite">
+    <div class="connections">Узел 1: соединение ветвей с R₂, R₃ и R₇.</div>
+    <div class="currents">Входит: I₂. Выходят: I₃ и I₇.</div>
+    <div class="balance">I₂ = I₃ + I₇</div>
+  </div>
+  <div class="caption">Стрелки токов — выбранные направления из отчёта; отрицательное значение означает обратное направление.</div>
+
+</div>
+
+    </div>
   </section>
   <section id="basics" aria-labelledby="basics-title">
     <h2 id="basics-title">Четыре величины, с которых начинается электротехника</h2>
